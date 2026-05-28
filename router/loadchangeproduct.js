@@ -8,7 +8,7 @@ const { createToken } = require("../module/moduleuser");
 const { loadserver } = require("../module/serverreload");
 const { setTimeout } = require("timers");
 
-setInterval(() => loadchangeproduct(), 20000);
+setInterval(() => loadchangeproduct(), 3000000);
 
 const loadchangeproduct = async () => {
     try {
@@ -47,7 +47,7 @@ const loadchangeproduct = async () => {
                             for (var item = 0; item < result.data.result.result.length; item++) {
 
                                 let model = result.data.result.result[item];
-                                console.log(model)
+                                // console.log(model)
                                 let createdate = model.createdDate;
                                 let dateValue = createdate.split(" ");
                                 let [day, month, year] = dateValue[0].toString().split("/").map(Number);
@@ -83,7 +83,6 @@ const loadchangeproduct = async () => {
         }
 
 
-        setTimeout(() => console.log("delay running reload."), 5000)
         await loadserver();
 
 
