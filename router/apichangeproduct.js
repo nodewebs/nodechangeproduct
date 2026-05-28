@@ -5,6 +5,7 @@ const https = require("https");
 
 const { createToken } = require("../module/moduleuser");
 const { datefirstload } = require("../module/dateload");
+const { STATUS_CODES } = require("http");
 
 
 app.get("/getchangeproduct", async (req, res) => {
@@ -17,6 +18,16 @@ app.get("/getchangeproduct", async (req, res) => {
         if (token == '') {
             return res.status(400).json({ status: false, code: 0, message: "cannot login user token." })
         }
+        let pagesize = 0;
+        if (pageSize) {
+            if (parseInt(pageSize) > 0) {
+                pagesize = parseInt(pageSize);
+            } else {
+                pagesize = 100;
+            }
+        } else {
+            pagesize = 100;
+        }
 
         let resmodel = [];
         const date = datefirstload(1);
@@ -26,7 +37,7 @@ app.get("/getchangeproduct", async (req, res) => {
             return res.status(400).json({ status: false, code: 0, message: "cannot load date invalid." });
         }
 
-        let key = `page=1&pageSize=10&sortBy=createdDate&sortOrder=desc&isdn=&orderNo=&actionTypeId=27&invoiceNo=&shopId=&accountCode=&productId=&invoiceStatus=&createdBy=&startDate=${date}&endDate=${date}`
+        let key = `page=1&pageSize=${pagesize}&sortBy=createdDate&sortOrder=desc&isdn=&orderNo=&actionTypeId=27&invoiceNo=&shopId=&accountCode=&productId=&invoiceStatus=&createdBy=&startDate=${date}&endDate=${date}`
 
         const result = await axios.get(`https://172.28.32.4/order-service/api/order/list?${key}`, { httpsAgent: new https.Agent({ rejectUnauthorized: false }), headers: { Authorization: `Bearer ${token}` } });
 
@@ -54,9 +65,24 @@ app.get("/getchangeproduct", async (req, res) => {
         return res.status(200).json({ status: true, code: 0, message: "query changeproduct success.", result: resmodel });
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ status: false, code: 0, message: "" })
+        return res.status(400).json({ status: false, code: 0, message: "cannot query changeproduct ." })
     }
+});
 
+app.post("/loadchangeproduct/:date", async (req, res) => {
+    try {
+
+        const { date } = req.params;
+
+
+
+
+        return res.status(200).json({ status: true, code: 0, message: "", result: [] })
+    } catch (error) {
+
+
+
+    }
 
 })
 
