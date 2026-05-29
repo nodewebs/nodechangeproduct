@@ -29,14 +29,23 @@ app.get("/getchangeproduct", async (req, res) => {
             pagesize = 100;
         }
 
-
         let resmodel = [];
-        const date = datefirstload(1);
+        let date = datefirstload(1);
         // 
 
         if (date == '') {
             return res.status(400).json({ status: false, code: 0, message: "cannot load date invalid." });
         }
+        
+        if (startDate) {
+            const datestart = new Date(startDate.toString());
+            if (datestart == "Invalid Date") {
+                return res.status(400).json({ status: false, code: 1, message: "cannot query changeproduct startDate=yyyy-MM-dd Invalid." })
+            }else{
+                date = startDate;
+            }
+        }
+
 
         let key = `page=1&pageSize=${pagesize}&sortBy=createdDate&sortOrder=desc&isdn=&orderNo=&actionTypeId=27&invoiceNo=&shopId=&accountCode=&productId=&invoiceStatus=&createdBy=&startDate=${date}&endDate=${date}`
 
